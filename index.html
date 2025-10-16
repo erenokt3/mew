@@ -1,199 +1,190 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    
-    <style>
-        :root {
-            --envelope-color: #f7b731; /* Zarf rengi */
-            --flap-color: #e5a620; /* Kapak rengi */
-            --heart-color: #ff6b81; /* Kalp rengi */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>abo</title>
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-            overflow: hidden; 
-            position: relative;
-            font-family: sans-serif;
-        }
+  <style>
+    :root {
+      --envelope-color: #f7b731;
+      --flap-color: #e5a620;
+      --heart-color: #ff6b81;
+    }
 
-        /* --- Zarf Stilleri --- */
-        .envelope-wrapper {
-            position: relative;
-            z-index: 10; 
-            cursor: pointer;
-            perspective: 1000px;
-        }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #fcefee;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      position: relative;
+    }
 
-        .envelope {
-            width: 250px;
-            height: 150px;
-            position: relative;
-            transition: transform 0.5s;
-        }
+    /* Kalplerin Arka Planı */
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
 
-        /* Zarf Gövdesi (Arka kısım) */
-        .envelope-body {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: var(--envelope-color);
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+    .heart {
+      position: absolute;
+      color: var(--heart-color);
+      font-size: 20px;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatHeart linear forwards;
+    }
 
-        /* Zarf Kapağı */
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 125px solid transparent;
-            border-right: 125px solid transparent;
-            border-top: 75px solid var(--flap-color); 
-            transform-origin: top;
-            transition: transform 0.5s ease-in-out;
-            z-index: 3;
-        }
+    @keyframes floatHeart {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.5);
+      }
+      10% {
+        opacity: 0.9;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) scale(1.5);
+      }
+    }
 
-        /* Mektup/Resim */
-        .letter {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 240px;
-            height: 140px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-            transform: translateY(150px); /* Başlangıçta zarfın altında gizli */
-            transition: transform 0.7s 0.3s; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+    /* Zarf */
+    .envelope-wrapper {
+      position: relative;
+      z-index: 10;
+      cursor: pointer;
+      perspective: 1000px;
+    }
 
-        .letter img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+    .envelope {
+      width: 250px;
+      height: 150px;
+      position: relative;
+    }
 
-        /* --- Zarf Açılma Durumu (JavaScript ile eklenir) --- */
-        .open .envelope-flap {
-            transform: rotateX(180deg); /* Kapak geriye döner */
-        }
+    .envelope-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: var(--envelope-color);
+      border-radius: 6px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
 
-        .open .letter {
-            transform: translateY(-50px); /* Resim zarfın üstüne çıkar */
-            transition: transform 0.7s; 
-        }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 125px solid transparent;
+      border-right: 125px solid transparent;
+      border-top: 75px solid var(--flap-color);
+      transform-origin: top;
+      transition: transform 0.6s ease-in-out;
+      z-index: 3;
+    }
 
-        /* --- Kalp Animasyonları --- */
-        .hearts-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        .heart {
-            position: absolute;
-            color: var(--heart-color);
-            font-size: 20px;
-            pointer-events: none; 
-            opacity: 0;
-            transform: translateY(0);
-            animation: floatHeart 10s infinite ease-in; 
-            line-height: 1; /* Sembolün etrafındaki boşluğu azaltır */
-        }
+    .letter {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 240px;
+      height: 140px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      transform: translateY(150px);
+      transition: transform 0.7s 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 8px;
+    }
 
-        /* Kalplerin yukarı doğru yavaşça kaybolduğu animasyon */
-        @keyframes floatHeart {
-            0% {
-                opacity: 0;
-                transform: translateY(0) scale(0.5);
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) scale(1.5); 
-            }
-        }
-    </style>
+    .letter img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Açılma efekti */
+    .open .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      transform: translateY(-70px);
+      transition: transform 0.7s ease-out;
+    }
+  </style>
 </head>
 <body>
+  <div class="hearts-container"></div>
 
-    <div class="hearts-container">
-        </div>
-
-    <div class="envelope-wrapper" id="envelopeWrapper">
-        <div class="envelope" id="envelope">
-            <div class="envelope-body"></div>
-            <div class="letter" id="letter">
-                <img src="https://share.google/images/H0PxeNlBmxQ94F8R4" alt="Sürpriz Resim">
-            </div>
-            <div class="envelope-flap" id="envelopeFlap"></div>
-        </div>
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    <div class="envelope">
+      <div class="envelope-body"></div>
+      <div class="letter">
+        <img
+          src="https://share.google/images/H0PxeNlBmxQ94F8R4"
+          alt="Sürpriz Görsel"
+        />
+      </div>
+      <div class="envelope-flap"></div>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const envelope = document.getElementById('envelopeWrapper');
-            const heartsContainer = document.querySelector('.hearts-container');
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const envelope = document.getElementById("envelopeWrapper");
+      const heartsContainer = document.querySelector(".hearts-container");
 
-            // 1. Zarfı Açma/Kapama İşlevi
-            envelope.addEventListener('click', () => {
-                // Tıklayınca 'open' sınıfını ekle/kaldır
-                envelope.classList.toggle('open');
-            });
+      // Zarfa tıklanınca aç/kapa
+      envelope.addEventListener("click", () => {
+        envelope.classList.toggle("open");
+      });
 
-            // 2. Rastgele Kalp Oluşturma ve Animasyon İşlevi
-            function createHeart() {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '&#9829;'; // Kalp HTML kodu (♥)
+      // Rastgele kalp oluşturma
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "&#9829;";
 
-                // Kalp boyutunu ve başlangıç pozisyonunu rastgele ayarla
-                const size = Math.random() * 20 + 10; // 10px - 30px
-                heart.style.fontSize = `${size}px`;
-                
-                // Ekranın altından başlasın
-                heart.style.left = `${Math.random() * 100}vw`; 
-                heart.style.bottom = `${-size}px`; 
+        const size = Math.random() * 20 + 10;
+        heart.style.fontSize = `${size}px`;
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.bottom = `-${size}px`;
 
-                // Rastgele animasyon süresi ve gecikmesi
-                const duration = Math.random() * 8 + 7; // 7s - 15s
-                const delay = Math.random() * 5; // 0s - 5s
-                
-                heart.style.animationDuration = `${duration}s`;
-                heart.style.animationDelay = `${delay}s`;
+        const duration = Math.random() * 8 + 6; // 6-14s
+        heart.style.animationDuration = `${duration}s`;
 
-                heartsContainer.appendChild(heart);
+        heartsContainer.appendChild(heart);
 
-                // Animasyon bitince kalbi DOM'dan kaldır
-                heart.addEventListener('animationend', () => {
-                    heart.remove();
-                });
-            }
-
-            // Belirli aralıklarla yeni kalpler oluştur
-            setInterval(createHeart, 300); // Her 300 milisaniyede bir kalp oluştur
+        heart.addEventListener("animationend", () => {
+          heart.remove();
         });
-    </script>
+      }
+
+      // Sürekli kalpler oluştur
+      setInterval(createHeart, 300);
+    });
+  </script>
 </body>
 </html>
+
